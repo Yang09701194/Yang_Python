@@ -85,7 +85,8 @@ z.real # 實部
 z.imag # 虛部  是數字  不帶 j 
 z.conjugate() # 共軛複數
 
-import cmath # 有 complex 型別的相關函式  如直角坐標系(笛卡兒座標系) 和 極坐標系 的轉換
+import cmath
+import fractions # 有 complex 型別的相關函式  如直角坐標系(笛卡兒座標系) 和 極坐標系 的轉換
 x = 4+5j; y = 6+7j;
 abs(x) # 絕對值 模
 cmath.phase(x) # 幅角 弧度
@@ -106,10 +107,22 @@ b = decimal('0.1') # 用字串表示  就會是真的 '0.1'  計算就會維持�
 b = a * a + a
 # decimal 也提供 sqrt  explog10  四捨五入用  quantize
 # decimal 還有算術環境 可以設定精確度 捨入規則 指數限制
- decimal.getcontext()
+decimal.getcontext()
 #Context(prec=28, rounding=ROUND_HALF_EVEN, Emin=-999999, Emax=999999, capitals=1,
 #  clamp=0, flags=[], traps=[InvalidOperation, DivisionByZero, Overflow])
 # 這些都可以屬性設定
 
+# p100 分數 Fraction 有理數
+from fractions import *
+a = Fraction(1,3) # 1/3
+#用法詳見 100
+a.limit_denominator(100)  #  限定分母最大值  預設六位數  100 可限制到兩位數
+# F(...).limit_denominator() # 找出無窮小樹的 近似分數
 
+
+# pyhton 用 二補述表示法   11111 是 -1 單個 0  二進位相關概念  p103
+
+# 位元運算子  ~ : not   << >>  &  ^ : xor  | 
+
+# +=  >>>>   <<= >>=  &= 
 

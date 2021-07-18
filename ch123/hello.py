@@ -221,18 +221,18 @@ range(2,4) # 234
 range(1,10,2) # 1 3 5 7 9
 
 li = [30,41,52]
-for i in range(len(i))
- li[i] += 100;
- 
+for i in range(len(i)):
+  li[i] += 100
+
 # abs() pow() round()  divmod() all() any() id() type() callable()
 # 2.x 有分 type class  3.x  全部都 class  
 # function 也 class 且是可呼叫的  所以 callable(f) 是 true
 
 # 基礎型別都有建構式
 int(4.5) # 4
-flaor(-4.5) # -4.5
+float(-4.5) # -4.5
 a = list((1,2)) # list(tuple)也行   有複製的效果
-tuple(([,2])# 同上
+tuple([1,2])# 同上
 
 #bool(a) 得知 T F
 
@@ -245,4 +245,4 @@ tuple(([,2])# 同上
 # a = input('Your Name: ')
 # 輸入 Ken  會得到  Your Name: Ken
 
-#python 也有 eval(程式碼)  不介紹
+#python 也有 eval()
