@@ -120,15 +120,40 @@ def ftoc(ft):
 #可以簡寫為  串列生成式 
 ft = [1,2,3]
 ct = [(x-32)* 5/9 for x in ft]   #類似  倒反語法  三原運算子也來來這招
-# 有很多變化用法 p143   for 雙層也可以
+# 有很多變化用法 p143   for 雙層  夾雜 if 也可以 
 
+# 字串
+# >>> a = "'"  # 單雙引號都可   單或雙 可包另一個  
+# >>> a += '2'
+# >>> a
+# "'2"
+# \ 是程式碼字串值的換行  但是拼起來的時候  還是一行
+# >>> a = 'a\
+# ... b\
+# ... c'
+# >>> a
+# 'abc'
+# \'  \" \n \r \t   \xx(十六進位表字元)  \ooo(八進位)
+# >>> '\''
+# "'"
+# ''' 等同C#的 @""  可以跨多航  不用 \
+# '' 開頭加 r 可以自動套用跳脫    檔案路徑好表示
+# >>> r'\n'
+# '\\n'
 
-
-
-
-
-
-
+ord('a') # 97   字元　<-> ASCII 碼
+chr(97) # a
+# str 也符合 Iterable 抽象型別
+# 字串 不可變物件   所以操作都會回傳新物件
+s = ''
+#151
+s.capitalize(); s.lower(); s.upper(); s.swapcase(); s.islower(); s.isupper(); s.istitle();
+s.isspace(); s.isalpha(); s.isdigit(); s.isdecimal(); s.isalnum(); s.isidentifier();
+s.isprintable(); # s.find(...)  index(...) count startswith endswith  replace  #p151
+# s.strip([chars])  頭尾去除   lstrip rstrip 
+s.center('放中間的字串', '兩端字串')
+# ljust rjust zfill expandtabs   partition分三段  rpartition split rsplit  splitlines
+# join decode encode translate format(args, **kwargs)
 
 
 
