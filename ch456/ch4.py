@@ -149,14 +149,24 @@ s = ''
 #151
 s.capitalize(); s.lower(); s.upper(); s.swapcase(); s.islower(); s.isupper(); s.istitle();
 s.isspace(); s.isalpha(); s.isdigit(); s.isdecimal(); s.isalnum(); s.isidentifier();
-s.isprintable(); # s.find(...)  index(...) count startswith endswith  replace  #p151
+s.isprintable(); s.title();
+# s.find(...)  index(...) count startswith endswith  replace  #p151
 # s.strip([chars])  頭尾去除   lstrip rstrip 
 s.center('放中間的字串', '兩端字串')
 # ljust rjust zfill expandtabs   partition分三段  rpartition split rsplit  splitlines
 # join decode encode translate format(args, **kwargs)
 
+# join 效率比 += 好
+# 字串格式化   % 比較舊  format 比較新 更強
+'I am %i years old' % 17
+name = 'test'
+'I am %i years old, my name is %s' % (17, name)
+# P158 %idoxXfFeEgGcsr%u  #0- ' ' + 8i  %.2f  %dict
 
-
+# p161  
+'{0} {1}  {2}'.format(123,45.67, 'hi')  # {{   }}
+template = '{} {x1} {x2}'
+template.format('Hi', x1 = 'test1', x2='test2')  # 其他更複雜見 162
 
 # p137
 def my_sum(iterable, start=0):
@@ -267,5 +277,65 @@ def flatten(iterable):
 print(flatten([[0, 1, 2], [3, 4, 5], [6], [7, 8], [9]]))
 print(flatten([[0, 1], [3, 5], [6], [7, 8], [9]]))
 
+# 165
+def hamming(s1, s2):
+    lens = (len(s1), len(s2))
+    minlen = min(lens)
+    maxlen = max(lens)
+    h = maxlen - minlen
+
+    for i in range(minlen):
+        if(s1[i] != s2[i]):
+            h += 1
+    
+    return h
+
+print(hamming('abcde', 'edcba')) # 4
+print(hamming('abc', 'abcde')) # 2
+print(hamming('1011101', '1001001')) # 2
+print(hamming('karolin', 'kathrin')) # 3
+
+def is_anagram(s1, s2):
+    s1 = ''.join(s1.lower().split())
+    s2 = ''.join(s2.lower().split())
+    return sorted(s1) == sorted(s2)
+
+# True
+print(is_anagram('heart', 'earth'))
+print(is_anagram('Torchwood', 'Doctor Who'))
+print(is_anagram('spot', 'stop'))
+print(is_anagram('silent', 'listen'))
+print(is_anagram('William Shakespeare', 'I am a weakish speller'))
+print(is_anagram('computer', 'cuter mop'))
+print(is_anagram('a b c  \t\n 1 2 3 \t\n ', '123abc\t\n'))
+print('')
+# False
+print(is_anagram('abc', 'abd'))
+print(is_anagram('play', 'pray'))
+print(is_anagram('string', 'sting'))
+
+alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+def base36encode(number, alphabet=alphabet):
+    result = []
+    base = len(alphabet)
+    sign = ''
+    if number < 0:
+        sign = '-'
+        number = -number
+        
+    while number >= base:
+        number, i = divmod(number, base)
+        result.append(alphabet[i])
+    result.append(alphabet[number])
+    if sign == '-':
+        result.append(sign)
+        
+    return ''.join(reversed(result))
+
+print(base36encode(int('0', 36)))
+print(base36encode(int('ZZ', 36)))
+print(base36encode(int('ZYXW', 36)))
+print(base36encode(int('-ABCDEF', 36)))
+print(base36encode(int('-GHIJKLMNOPQ', 36)))
 
 
