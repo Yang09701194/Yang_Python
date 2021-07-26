@@ -251,7 +251,7 @@ def int_from(n, increment=1):
 y = int_from(5,2)
 next(y)
 
-# yield from 
+# 271 yield from 
 def sub_fg(n):
     i = 1 if n >0 else -1
     inc = i
@@ -274,6 +274,28 @@ g = gf()
 print(next(g))
 print(g.send(3)) # 3
 print(g.send(5)) # 8
+
+# 可迭代者  本身不是迭代器  重新取 iter 可以取到從頭開始的 
+ls = [1, 2, 3]
+g = iter(ls)
+h = iter(ls)
+next(g); next(g); next(g); # 1 2 3
+next(h) # 1
+y = iter(g)
+next(y)
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+# StopIteration
+y = iter(h)
+next(y) # 2
+x = z = e = y # 淺複製 其實都是指向同個物件 
+
+# 內建  object 建構式  可建立一個獨一無二的參數值
+_default_value_ = object()
+def foo(x, y, z = _default_value_):
+    if z is _default_value_ : pass
+
+
 
 
 
