@@ -8,6 +8,7 @@
 # namedtuple(typename, field_names, verbose=False, rename=False)
 from collections import deque, namedtuple
 from time import perf_counter, process_time
+from types import resolve_bases
 Point = namedtuple('Point', ['x', 'y', 'z'])
 pa = Point(1,2,3)
 Point(x=1, y=2, z=3)
@@ -310,6 +311,85 @@ print(fact_i(3))
 # 另有計算函式執行時間  兩次呼叫的差值
 # perf_counter 睡覺也算  process_time  真正執行時間 沒有算睡眠
 
+# 內建 LRU Cache 可以指定容量快取善計算結果   用參數曲 hash
+#    遇到不能 hash 擇要自己另外寫
+import functools
+@functools.lru_cache(maxsize=200)
+def fib_r(n):
+    if n == 0 or n == 1:
+        return n
+    else:
+        return fib_r(n-1) + fib_r(n-2)
+
+# 巢狀裝飾器   裝飾器也可以寫在函式中的函式上面
+# @decorator1
+# @decorator2
+
+# 函數式程式設計（英語：functional programming）
+# 盡量不對全域變數作用 盡量只依靠傳入的參數處理  行為僅相依於參數 
+# 就是函式一個工廠  處理單元  輸入就是參數  輸出就是回傳值
+# 只要傳入相同參數  呼叫多次還是回傳一樣結果
+# 不要改變傳入參數 就算是可變的  
+# 函式當成基本單位後  就很像堆積木  依照需求組合出流程
+# 而且希望能做到能自由組合 拆解  置換
+# 原本算平方數的地方 可以簡單置換成 費氏數  立方數 等
+def sq(n): return n ** 2
+def even(n): return n % 2 == 0
+def odd(n): return not even(n)
+def fib(n): return 1 # fib num
+def my_map(func, iterable):
+    result = []
+    for e in iterable:
+        result.append(func(e))
+    return result
+def my_filter(func, iterable):
+    result = []
+    for e in iterable:
+        if func(e):
+            result.append(e)
+    return result
+
+# 這邊就很  FP    定義的函數可以傳入  函數  在關鍵流程執行傳入參數  
+# 所以可以把參數當作積木  進行參數組合  呼叫組合
+def sum_sq_even(n):
+    return sum(my_map(sq, my_filter(even, range(1, n))))
+def odd_fibs(n):
+    return list(my_filter(odd, my_map(fib, range(n))))
+# python 本身內建 map (用 func 計算所有結果 回傳)  filter (濾出真的回傳)
+map(fib, range(10))  # 回傳 iterable
+filter(even, range(10)) # 回傳 list
+
+# starmap 可以展開傳入的參數 如果是   tuple 的 list  每組元素可展開 x y z
+# 在函式使用
+from itertools import chain, starmap
+scores = [(1,2,3),(4.5,6)]
+list(starmap(lambda x,y,z: (x+y+z)/3, scores))
+# reduce  跟  Aggregate 有點類似  對  list 裡面的元素  兩兩作用  往後持續下去
+from functools import reduce
+reduce(lambda x,y: x+y, [1,2,3,4,5])
+#15 
+reduce(lambda x,y: x+[y], [1,2,3,4,5], []) # 最後參數初始值
+#[1,2,3,4,5]
+#reduce 可以更高階抽象畫幾乎所有運算 Max Sum ListAdd  所以可以更抽象 FP 讓語法更一致
+# 寫法更相同  替換不同的內部函式  外層一致使用 reduce
+from operator import add
+def sum_sq_even(n):
+    return reduce(add, my_map(sq, my_filter(even, range(1, n))))
+def odd_fibs(n):
+    return list(lambda x, y: x + [y], my_filter(odd, my_map(fib, range(n))), [])
+
+
+# 381 map 跟  filter  串列生成式 list comprehension 很相像
+# 只是串列生成式 只能使用運算式  map filter 可以寫更多更複雜的述句
+
+# 延遲處理   跟iterator 有點像  關鍵還是不用一次取得全部  一個一個進來
+# 用到才取下一個  如果有好幾個流程  和十萬筆資料
+# 整批處理  會是 10 萬筆一次取 然後全部處理完第一流程  再進下一個
+# 延遲就是少量少量一直往前送   可以說是  stream
+# 重點還有可以處理無限  就 iterator 的特性
+
+# chain 可以串多個迭代器  一個耗盡換下個
+# 3 個  ex  放最底下
 
 
 
@@ -516,6 +596,97 @@ for i in range(1000, 1050, 3):
         pass
     else:
         print('error')
+
+
+
+# 383
+
+
+from itertools import imap as map
+
+def prime_sieve(n):
+    primes = set(range(2, n+1))
+    for i in range(2, (n+1+1) // 2):
+        if i in primes:
+            m = 2
+            while i*m <= n:
+                primes.discard(i*m)
+                m += 1
+    return primes
+
+def is_prime(n):
+    return n in prime_sieve(n)
+def sum_of_primes(n):
+    return sum(filter(is_prime, range(2, n+1)))
+
+print(sum_of_primes(20))
+print(sum_of_primes(2 * 1000))
+
+
+
+# from itertools import imap as map
+from itertools import repeat, chain
+
+def prime_sieve(n):
+    primes = set(range(2, n+1))
+    for i in range(2, (n+1+1) // 2):
+        if i in primes:
+            m = 2
+            while i*m <= n:
+                primes.discard(i*m)
+                m += 1
+    return primes
+
+def gen_pairs(i):
+    return map(lambda i,j: (i,j), repeat(i), range(1, i))
+
+def gen_allpairs(n):
+    return chain(*map(gen_pairs, range(2, n+1)))
+
+def pair_sum(p):
+    return (p[0], p[1], p[0]+p[1])
+
+def is_prime(ps):
+    return ps[2] in prime_sieve(ps[2])
+
+def sum_is_prime(n):
+    return filter(is_prime, map(pair_sum, gen_allpairs(n)))
+
+print(list(sum_is_prime(6)))
+
+
+
+
+# Problem 45: Triangular, pentagonal, and hexagonal
+# https://projecteuler.net/problem=45
+
+from itertools import count
+from itertools import imap as map
+
+def filter_equal(ita, itb):
+    a = next(ita)
+    b = next(itb)
+    while True:
+        if a < b:
+            a = next(ita)
+        elif a > b:
+            b = next(itb)
+        else:
+            yield a
+            a = next(ita)
+
+def tph_gf():
+    t = map(lambda n: n * (n+1) // 2, count(1))
+    p = map(lambda n: n * (3*n - 1) // 2, count(1))
+    h = map(lambda n: n * (2*n - 1), count(1))
+    filter_tph = filter_equal(filter_equal(t, p), h)
+    while True:
+        yield next(filter_tph)
+
+tph = tph_gf()
+print(next(tph))  # 1
+print(next(tph))  # 40755
+print(next(tph))  # 1533776805
 
 
 
