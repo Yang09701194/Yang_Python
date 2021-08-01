@@ -19,7 +19,7 @@ random.uniform(0.1,0.5) # 1-6 亂數
 random.choice([0,1,2])
 random.shuffle([0,1,2])
 
-# rsndom 是  虛擬亂數  假亂數  pseudo random  還是有順序規則  不可用於加密安全
+# random 是  虛擬亂數  假亂數  pseudo random  還是有順序規則  不可用於加密安全
 
 # 2.x  要使用 3.x  用  from __future__ import 模組名稱
 # __future__ 要放在第一行   只對目前程式有作用  匯入其他含有 __future__ 的模組檔 沒有作用  還是要寫 p67
