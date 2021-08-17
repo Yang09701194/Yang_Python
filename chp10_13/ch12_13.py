@@ -343,6 +343,49 @@ print(out_b.decode('utf-8'))
 # 上面的函式會使用較低階的 Popen 來完成   Popen 可以做更進階的
 # 如果需製作互動式的主控台程式  可以用  pexpect
 
+# 一般是先寫好成是在執行   執行時動態產生code  或使用者輸入 code 執行
+# 是 eval exec  
+# eval('程式碼', global 命名空間, local 命名空間)
+eval('3 + 5')
+gd = {'a':3, 'b':4, 'c':5}
+eval('a - b + c', gd) # 4 
+ld = {'a':13, 'b':14, 'c':15}
+x = eval('a - b + c', gd, ld)  # 14
+
+# eval 運算式  述句或多行  exec 
+from io import open
+gd = {'c': 10}
+with open('a.py', 'r') as fin:
+    exec(fin.read(), gd)
+    print(gd['a'])
+    print(gd['b'])
+
+# pyhton 有直譯器全局鎖  Global Interpreter Lock  執行緒適合用於 IO bound
+# 不適合 cpu bound
+# python 很早以前就支援 concurrency Thread Process
+
+# 電影院  10個售票員 賣 100張票  用 10 Thread 模擬  亂數模擬賣票所需時間
+
+# 模組清單
+# 檔案操作 用 os os.path shutil sys
+# xml html  htmllib xml.dom xml.sax  BeautifulSoup
+# regular expr   re
+# nlp  nltk Natural Language Toolkit
+# 微控制器開發板  Arduino  單板電腦 Raspberry Pi  Beagle Bone
+# 開發板與外界溝通 : 藍芽 Wifi 紅外線 SPI I2C USB   序列埠 pySerial
+# FTP ftplib   TELNET telnetlib  HTTP httplib urllib2 requests
+# 網路爬蟲 Scrapy
+# 網站 Django Flask   TurboGears Pylons web2Py Pyjamas Zope2 Plone
+# game pygame   Minecraft Pyglet
+# 多重觸控介面  Kivy
+# 資料分析  pandas  數值運算  NumPy  科學數學演算法  SciPy  
+# IPython 互動式運算介面  比 CPython 好用
+
+# Lua 遊戲引擎
+# 
+
+
+
 
 
 
